@@ -1,0 +1,36 @@
+@backendApi_HostAddress = http://localhost:5277
+
+POST {{backendApi_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Demo User",
+  "email": "user@example.com",
+  "password": "User123"
+}
+
+###
+
+POST {{backendApi_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin123"
+}
+
+###
+
+@token = paste_token_here
+
+GET {{backendApi_HostAddress}}/api/auth/me
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+GET {{backendApi_HostAddress}}/api/user
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
