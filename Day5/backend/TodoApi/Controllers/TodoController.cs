@@ -9,11 +9,11 @@ namespace TodoApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]  // 🔐 Yêu cầu JWT Token
+[Authorize]
 public class TodoController : ControllerBase
 {
     private readonly AppDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;  // ✅ Giờ đã nhận diện được
+    private readonly UserManager<ApplicationUser> _userManager; 
 
     public TodoController(AppDbContext context, UserManager<ApplicationUser> userManager)
     {
@@ -42,7 +42,7 @@ public class TodoController : ControllerBase
         };
         
         _context.Todos.Add(todo);
-        await _context.SaveChangesAsync();  // ✅ Fix lỗi CS1061: SaveChangesAsync
+        await _context.SaveChangesAsync();  
         
         return CreatedAtAction(nameof(GetTodos), new { id = todo.Id }, todo);
     }
@@ -59,7 +59,7 @@ public class TodoController : ControllerBase
         todo.Description = dto.Description ?? todo.Description;
         todo.IsCompleted = dto.IsCompleted ?? todo.IsCompleted;
         
-        await _context.SaveChangesAsync();  // ✅ Fix lỗi
+        await _context.SaveChangesAsync();  
         return NoContent();
     }
 
@@ -72,12 +72,11 @@ public class TodoController : ControllerBase
         if (todo == null) return NotFound();
         
         _context.Todos.Remove(todo);
-        await _context.SaveChangesAsync();  // ✅ Fix lỗi
+        await _context.SaveChangesAsync();  
         return NoContent();
     }
 }
 
-// DTOs
 public class CreateTodoDto 
 { 
     public string Title { get; set; } = string.Empty; 
