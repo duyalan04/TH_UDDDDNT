@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,9 +11,22 @@ import 'controllers/auth_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); 
+  if (kIsWeb) {
+    await Firebase.initializeApp(options: firebaseOptions);
+  } else {
+    await Firebase.initializeApp();
+  }
   runApp(const MyApp());
 }
+
+const FirebaseOptions firebaseOptions = FirebaseOptions(
+  apiKey: 'AIzaSyDd30BLdkN_LJFIkt-nJECgv9W6qw8FJiw',
+  appId: '1:275335338042:web:1387ab9e0439d434b0fd03',
+  messagingSenderId: '275335338042',
+  projectId: 'todosapp-lab4a',
+  authDomain: 'todosapp-lab4a.firebaseapp.com',
+  storageBucket: 'todosapp-lab4a.firebasestorage.app',
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

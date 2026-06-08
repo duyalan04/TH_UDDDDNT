@@ -1,8 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  static const String _webClientId =
+      '275335338042-e9o3nn24eiv8dhcndgkcltmi7rb63pum.apps.googleusercontent.com';
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: kIsWeb ? _webClientId : null,
+  );
 
   Future<String> createAccountWithEmail(String email, String password) async {
     try {
@@ -26,7 +32,7 @@ class AuthService {
 
   Future logout() async {
     await FirebaseAuth.instance.signOut();
-    if (await _googleSignIn.isSignedIn()) {
+    if (!kIsWeb && await _googleSignIn.isSignedIn()) {
       await _googleSignIn.signOut();
     }
   }
@@ -38,8 +44,16 @@ class AuthService {
 
   Future<String> continueWithGoogle() async {
     try {
+      if (kIsWeb) {
+        final userCredential = await FirebaseAuth.instance
+            .signInWithPopup(GoogleAuthProvider());
+        return userCredential.user == null
+            ? "Login Cancelled"
+            : "Google Login Successful";
+      }
+
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      
+
       if (googleUser == null) return "Login Cancelled";
 
       final GoogleSignInAuthentication gAuth = await googleUser.authentication;
